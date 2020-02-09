@@ -32,37 +32,41 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
+    // 缓存管理器
     @Bean
-    public RedisCacheManager redisCacheManager(){
+    public RedisCacheManager redisCacheManager() {
         return new RedisCacheManager();
     }
 
+
+    // 自定义密码校验
     @Bean
-    public CustomHashedCredentialsMatcher customHashedCredentialsMatcher(){
+    public CustomHashedCredentialsMatcher customHashedCredentialsMatcher() {
         return new CustomHashedCredentialsMatcher();
     }
+
+    // 自定义域
     @Bean
-    public CustomRealm customRealm(){
-        CustomRealm customRealm=new CustomRealm();
+    public CustomRealm customRealm() {
+        CustomRealm customRealm = new CustomRealm();
         customRealm.setCredentialsMatcher(customHashedCredentialsMatcher());
         customRealm.setCacheManager(redisCacheManager());
         return customRealm;
     }
+
+    // 安全管理
     @Bean
-    public SecurityManager securityManager(){
-        DefaultWebSecurityManager defaultWebSecurityManager=new DefaultWebSecurityManager();
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
         defaultWebSecurityManager.setRealm(customRealm());
         return defaultWebSecurityManager;
     }
+
     /**
      * shiro过滤器，配置拦截哪些请求
-     * @Version:     0.0.1
-     * @param securityManager
-     * @return       org.apache.shiro.spring.web.ShiroFilterFactoryBean
-     * @throws
      */
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager){
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         //自定义拦截器限制并发人数,参考博客：
@@ -88,9 +92,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/druid/**", "anon");
         filterChainDefinitionMap.put("/favicon.ico", "anon");
         filterChainDefinitionMap.put("/captcha.jpg", "anon");
-        filterChainDefinitionMap.put("/","anon");
-        filterChainDefinitionMap.put("/csrf","anon");
-        filterChainDefinitionMap.put("/**","token,authc");
+        filterChainDefinitionMap.put("/", "anon");
+        filterChainDefinitionMap.put("/csrf", "anon");
+        filterChainDefinitionMap.put("/**", "token,authc");
         //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
         shiroFilterFactoryBean.setLoginUrl("/api/user/unLogin");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
@@ -100,9 +104,6 @@ public class ShiroConfig {
     /**
      * 开启shiro aop注解支持.
      * 使用代理方式;所以需要开启代码支持;
-     * @param securityManager
-     * @return       org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor
-     * @throws
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
@@ -110,6 +111,7 @@ public class ShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
+
     @Bean
     @ConditionalOnMissingBean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
@@ -130,6 +132,7 @@ public class ShiroConfig {
                 }
                 return super.isAccessAllowed(request, response, mappedValue);
             }
+
             @Override
             protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
                 WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED);

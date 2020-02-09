@@ -15,10 +15,16 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
     @Bean
     public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory){
+
+        // 连接redis template
         RedisTemplate<String,Object> redisTemplate=new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
+
+        // redis-template的默认的string类型的序列化方式和自己封装的mystringRedis
         StringRedisSerializer stringRedisSerializer=new StringRedisSerializer();
         MyStringRedisSerializer myStringRedisSerializer=new MyStringRedisSerializer();
+
+        // 设置序列化
         redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
         redisTemplate.setHashValueSerializer(myStringRedisSerializer);

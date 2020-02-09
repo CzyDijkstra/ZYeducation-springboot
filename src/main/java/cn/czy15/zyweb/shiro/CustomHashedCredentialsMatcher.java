@@ -13,16 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * @ClassName: CustomHashedCredentialsMatcher
- * TODO:类文件简单描述
- * @Author: 小霍
- * @UpdateUser: 小霍
- * @Version: 0.0.1
- */
+
 public class CustomHashedCredentialsMatcher extends HashedCredentialsMatcher {
     @Autowired
     private RedisService redisService;
+    // 对token的校验
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
         CustomUsernamePasswordToken customUsernamePasswordToken= (CustomUsernamePasswordToken) token;
@@ -55,7 +50,6 @@ public class CustomHashedCredentialsMatcher extends HashedCredentialsMatcher {
         }
         /**
          * 判断这个登录用户是否要主动去刷新
-         *
          * 如果 key=Constant.JWT_REFRESH_KEY+userId大于accessToken说明是在 accessToken不是重新生成的
          * 这样就要判断它是否刷新过了/或者是否是新生成的token
          */

@@ -27,7 +27,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class SysLogAspect {
-    //环绕增强
+
     @Autowired
     private SysLogMapper sysLogMapper;
     /**
@@ -36,14 +36,10 @@ public class SysLogAspect {
      */
     @Pointcut("@annotation(cn.czy15.zyweb.aop.annotation.MyLog)")
     public void logPointCut(){
-
     }
 
     /**
      * 环绕增强
-     * @param point
-     * @return
-     * @throws Throwable
      */
     @Around("logPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {

@@ -27,7 +27,7 @@ public class CustomRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
         Claims claims= JwtTokenUtil.getClaimsFromToken(accessToken);
         /**
-         * 返回该用户的角色信息给授权期
+         * 返回该用户的角色信息给授权器
          */
         if(claims.get(Constant.JWT_ROLES_KEY)!=null){
             info.addRoles((Collection<String>) claims.get(Constant.JWT_ROLES_KEY));
