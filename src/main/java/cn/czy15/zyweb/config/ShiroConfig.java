@@ -79,6 +79,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/user/register", "anon");
         filterChainDefinitionMap.put("/api/login", "anon");
         filterChainDefinitionMap.put("/api/courses", "anon");
+        filterChainDefinitionMap.put("/api/rate", "anon");
         filterChainDefinitionMap.put("/api/course/detail/*", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
         filterChainDefinitionMap.put("/treetable-lay/**", "anon");

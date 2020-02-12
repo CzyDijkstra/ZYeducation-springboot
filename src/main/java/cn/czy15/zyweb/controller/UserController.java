@@ -21,7 +21,6 @@ import javax.validation.Valid;
 
 /**
  * @ClassName: UserController
- * TODO:类文件简单描述
  */
 @RestController
 @RequestMapping("/api")

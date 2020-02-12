@@ -225,7 +225,6 @@ public class JwtTokenUtil {
      * 获取token的剩余过期时间
      *
      * @param token
-     * @param secretKey
      * @return       long
      * @throws
      */

@@ -86,13 +86,6 @@ public class UserServiceImpl implements UserService {
         return loginRespVO;
     }
 
-    /**
-     * mock 数据
-     * 通过用户id获取该用户所拥有的角色
-     * 后期修改为通过操作DB获取
-     *
-
-     */
     private List<String> getRolesByUserId(String userId) {
 
         return roleService.getRoleNames(userId);
@@ -212,10 +205,6 @@ public class UserServiceImpl implements UserService {
             claims.put(Constant.JWT_PERMISSIONS_KEY, getPermissionsByUserId(userId));
         }
         String newAccessToken = JwtTokenUtil.refreshToken(refreshToken, claims);
-//        if(redisService.hasKey(Constant.JWT_REFRESH_KEY+userId)){
-//            redisService.set(Constant.JWT_REFRESH_IDENTIFICATION+newAccessToken,userId,
-//                   redisService.getExpire(Constant.JWT_REFRESH_KEY+userId,TimeUnit.MILLISECONDS),TimeUnit.MILLISECONDS);
-//        }
         return newAccessToken;
     }
 

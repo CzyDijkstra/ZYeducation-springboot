@@ -5,11 +5,7 @@ import com.github.pagehelper.Page;
 
 import java.util.List;
 
-/**
- * @ClassName: PageUtil
- * TODO:类文件简单描述
- * @Version: 0.0.1
- */
+
 public class PageUtil {
     private PageUtil(){}
     public static <T> PageVO<T> getPageVO(List<T> list){

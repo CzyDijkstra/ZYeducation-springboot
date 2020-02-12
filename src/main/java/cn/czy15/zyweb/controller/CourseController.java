@@ -3,12 +3,14 @@ package cn.czy15.zyweb.controller;
 
 import cn.czy15.zyweb.aop.annotation.MyLog;
 import cn.czy15.zyweb.entity.SysCourse;
+import cn.czy15.zyweb.entity.SysRate;
 import cn.czy15.zyweb.entity.SysRole;
 import cn.czy15.zyweb.entity.SysUser;
 import cn.czy15.zyweb.service.CourseService;
 import cn.czy15.zyweb.utils.DataResult;
 import cn.czy15.zyweb.vo.req.*;
 import cn.czy15.zyweb.vo.resp.PageVO;
+import cn.czy15.zyweb.vo.resp.RateVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -65,8 +67,10 @@ public class CourseController {
     @ApiOperation(value = "分页查询课程接口-简略")
     public DataResult<PageVO<SysCourse>> pageInfo_quick(@RequestBody CoursePageReqVO vo){
         DataResult result=DataResult.success();
+//        PageVO<SysCourse> sysCoursePageVO = courseService.pageInfo_quick(vo);
         result.setData(courseService.pageInfo_quick(vo));
         return result;
+
     }
 
     @PostMapping("/courses/all")
@@ -77,12 +81,26 @@ public class CourseController {
         return result;
     }
 
+    @GetMapping("/rate")
+    @ApiOperation(value = "查询排行榜")
+    public DataResult<RateVO<SysRate>> Rate(){
+        DataResult result=DataResult.success();
+        result.setData(courseService.RedisRate_lastThreeDay());
+        return result;
+    }
+
     @GetMapping("/course/detail/{courseId}")
     @ApiOperation(value = "查询课程详情")
     public DataResult<SysCourse> detailInfo(@PathVariable("courseId")String courseId){
         DataResult result=DataResult.success();
-        result.setData(courseService.detailInfo(courseId));
-        return result;
+        SysCourse sysCourse = courseService.detailInfo(courseId);
+        result.setData(sysCourse);
+        try {
+            courseService.ADDRedisRate(sysCourse.getName(),sysCourse.getId());
+        }catch (Exception e){}
+        finally {
+            return result;
+        }
     }
 
 }

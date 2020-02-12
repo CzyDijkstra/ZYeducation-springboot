@@ -2,16 +2,17 @@ package cn.czy15.zyweb.service;
 
 
 import cn.czy15.zyweb.exception.BusinessException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Service
+@Component
 public class RedisService {
-    @Autowired
+    @Resource
     private RedisTemplate<String,Object> redisTemplate;
     /** -------------------key相关操作--------------------- */
 
@@ -804,4 +805,12 @@ public class RedisService {
         }
         return redisTemplate.opsForZSet().reverseRangeByScore(key, min, max);
     }
+
+    public Set<ZSetOperations.TypedTuple<Object>> reverseRangeWithScores(String key, long min, long max) {
+        if (null==key){
+            return null;
+        }
+        return redisTemplate.opsForZSet().reverseRangeWithScores(key, min, max);
+    }
+    //reverseRangeByScoreWithScores
 }
